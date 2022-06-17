@@ -1,25 +1,25 @@
 from requests_oauthlib import OAuth2Session
 import requests, zipfile, os, json, sqlite3
 
-HEADER = {"x-api-key": "6c05791cedb74b56bbcba241f99b90ce"}
-client_id = '40606'
+HEADER = {"x-api-key": "{bungie api key}"}
+client_id = '{client id}'
 token = {
-    "access_token": "CLGbBBKGAgAgpf88pgI+baSvNHoR0hcaGMYDcrqBFBaq8BOkB2S92DTgAAAAfCwIARXJUU8gobQgnbYlavm07PLtHlNvHTG/lYYt912AnEDl9c3oQjMkXgXII7BKyBnQoS/uLPg7ciVigz2eVTsBJ6pCtkzK8YqgRP03EbtS/G6viSqtQk+0iVC6oMb8M0y5GtpA9Kypa/imXyi2DchpjNAtOvposeueRA8U8RfuQU/n/u3M7NDiYFCcYF6x35+VvBYYoCenpeBtnah7pTCueqiuMcelXO6CuMVNj3K4bqkRL7JVrwdKWN1MFn/zbws2MzTjkcpAQk9/r+AmsVJo2i0XJfD+JmjH6LL5yUM=",
+    "access_token": "{access token}",
     "token_type": "Bearer",
-    "expires_in": 605000,
-    "refresh_token": "CLGbBBKGAgAg+4eMeLE4cV3WX6CrT6gbloxmpibygk1g6RGC4hdVopfgAAAA888F4CIdjn2FSb2DmxBIKY6UKOGexUrI2dlxk9cdyl2v5Gjy1HdDe+VyGTYexvz+SJrBb58wYIv3PUy8CClFI2kLZ8UHKJwEynTD/aIniXwHqHX0aQcoOJHyHCg8eIVF7fyO1wl9myLM5DvpyDC6Z/fmqQN4nK0vQqcYgNeCqNv7cpSG1QCPtQOJTSsrUM4O/GTmbwOSgYHlcxIUh/zbYhgMVtrcPrBcKdpvzVGgdK/ktoNbA4SmAEWv5beL027+UwKXCLUAX9E4htOX/jREH3kbSTIfvEBna1YKkXJ5b1Y=",
-    "refresh_expires_in": 605000,
-    "membership_id": "28393689"
+    "expires_in": {expire time in seconds},
+    "refresh_token": "{refresh token}",
+    "refresh_expires_in": {refresh expire time},
+    "membership_id": "{membershipId}"
 }
 auto_refresh_url='https://www.bungie.net/Platform/App/OAuth/Token/'
 extra = {
     'client_id': client_id,
-    'client_secret': 'uWEsGmGM91pjyp1b8AGDol9Sjmmacs-x4NqFD4S3oX8'
+    'client_secret': ''
 }
 
 hashes = {'DestinyInventoryItemDefinition': 'itemHash'}
 
-mods_wanted = ["Lucent Blade", "Energy Converter"]
+mods_wanted = ["Lucent Blade", "Energy Converter"] # some mods
 
 def token_saver(self, token):
     self.token = token
@@ -68,7 +68,7 @@ def build_dict(hashes):
 
 def mods_sold():
     client = OAuth2Session(client_id, token=token, auto_refresh_url=auto_refresh_url, auto_refresh_kwargs=extra, token_updater=token_saver)
-    r = client.get('https://www.bungie.net/Platform/Destiny2/3/Profile/4611686018515469512/Character/2305843009834704246/Vendors/350061650/?components=402', headers=HEADER)
+    r = client.get('{ada-1 URL}', headers=HEADER)
     data = r.json().get('Response').get('sales').get('data')
     mods = list(data.keys())
 
@@ -85,11 +85,11 @@ def send_message(itemName):
     }
 
     header = {
-        'authorization': 'MjM3MzY3NzUzMDEzNDYwOTky.G3yG5P.0ExGK1ff8oN0e1Wq_g9ERMxQiZLhAo4PV6ruP8'
+        'authorization': '{discord authorization}'
 
     }
 
-    message = requests.post('https://discord.com/api/v9/channels/987167602675699754/messages', data=payload, headers=header)
+    message = requests.post('https://discord.com/api/v9/channels/{channelId}/messages', data=payload, headers=header)
     print(message.status_code)
 
 def main():
